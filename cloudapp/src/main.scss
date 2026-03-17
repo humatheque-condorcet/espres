@@ -1,0 +1,86 @@
+
+@import './app/main/main.component.theme';
+
+@mixin themed-styles($theme, $typography) {
+    /* Include themed component mixins or theme dependent styles here */
+    @include main-component-theme($theme, $typography);
+}
+
+@mixin global-styles {
+    /* Add global styles here */
+    .text-error {
+    border: red solid 2px;
+    color:red;
+    padding: 5px;
+    font-weight: bolder;
+  }
+
+  .form-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column; 
+  }
+
+  .entities-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+  }
+
+  .holding-radio {
+    display: flex;
+    align-items: flex-start;  // aligne le radio bouton en haut du contenu
+    margin-bottom: 12px;      // espace entre chaque bouton
+
+    // si le texte est long, on permet le retour à la ligne
+    .mat-radio-label-content {
+      white-space: normal;
+    }
+  }
+
+  textarea {
+    padding: 2px;
+    border-width: 1px;
+    $width: calc(100% - 6px);
+    width: $width;
+    max-width: $width;
+    height: 150px;
+    font-family: monospace;
+    display: block;
+  }
+
+  textarea,
+  section,
+  mat-card {
+    margin-bottom: 20px;
+  }
+
+  pre {
+    overflow: auto;
+    max-height: 200px;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  pre,
+  textarea {
+    font-size: 0.9em;
+  }
+
+  li a {
+    cursor: pointer
+  }
+
+  .eca-actions {
+    display: flex;
+    gap: 10px; /* espace entre les boutons */
+  }
+
+  .eca-actions.single-button {
+    width: 100%;
+  }
+
+  .eca-actions.single-button button {
+    flex: 1; /* le bouton prend toute la largeur disponible */
+  }
+}

@@ -1,0 +1,26 @@
+<ng-container *ngIf="(entities$ | async) as entities">
+  <ng-container *ngIf="isEmpty(entities); else hasEntities">
+    <app-no-entities></app-no-entities>
+  </ng-container>
+
+  <ng-template #hasEntities>
+    <h1>ESPRES</h1>
+    <ul>
+      @for (entity of entities; track entity.id; let idx = $index, total = $count) {
+        <li>{{ entity.type | capitalize }} n°{{ idx + 1 }}/{{ total }}
+          <ng-container *ngIf="isExtended(entity)">
+            <br />
+            <p>Titre : {{ entity.details.title }}
+            <p>Code-barre : {{ entity.details.permanent_call_number }}
+          </ng-container>
+        </li> 
+      } @empty {
+        <li>There are no items.</li>
+      }
+    </ul>
+  </ng-template>
+</ng-container>
+
+<div class="loading-shade" *ngIf="loading">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>

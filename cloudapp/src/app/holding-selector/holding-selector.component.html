@@ -1,0 +1,6 @@
+<label id="holdings-radio-group-label" class="holding-radio">Choisir une holding</label>
+  <mat-radio-group aria-labelledby="holdings-radio-group-label" (change)="select($event)">
+    <mat-radio-button *ngFor="let h of holdings" [value]="h" class="holding-radio">
+      {{ h.title | truncate:25 }} — {{ h.author | truncate:15 }} - {{ h.call_number_value }}
+    </mat-radio-button>
+</mat-radio-group>
