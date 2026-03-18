@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AlertService, CloudAppEventsService,  EntityType, RestErrorResponse } from '@exlibris/exl-cloudapp-angular-lib';
-import { BehaviorSubject, forkJoin, iif, Observable, of, Subscription } from 'rxjs';
-import { switchMap, map, catchError, take, tap, finalize } from 'rxjs/operators';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { BehaviorSubject, forkJoin, from, iif, Observable, of, Subscription } from 'rxjs';
+import { switchMap, map, catchError, take, tap, finalize, mergeMap } from 'rxjs/operators';
 import { EnrichedEntity } from '../types/enriched-entity.type';
 import { EntityExtended } from '../models/entity-extended';
 import { ItemsService } from '../services/items.service';
@@ -10,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { getLocalisationFromCallNumber } from '../utils/getLocalisationFromCallNumber';
 import { HoldingsService } from '../services/holdings.service';
+import { Item } from '../models/item';
 
 @Component({
   templateUrl: './main.component.html',
@@ -18,11 +18,8 @@ import { HoldingsService } from '../services/holdings.service';
 export class MainComponent implements OnInit, OnDestroy {
 
   loading = false;
-  displayedColumns: string[] = ['title', 'callNumber', 'barcode']; 
+  displayedColumns: string[] = ['status', 'title', 'callNumber', 'barcode']; 
   dataSource: EnrichedEntity[] = [];
-
-  form!: FormGroup;
-  form_display: boolean = false;
 
   /**
    * Sujet RxJS privé pour émettre les entités.
@@ -51,7 +48,6 @@ export class MainComponent implements OnInit, OnDestroy {
   private entitiesSubscription!: Subscription;
 
   constructor(
-    private fb: FormBuilder,
     private eventsService: CloudAppEventsService,
     private alert: AlertService,
     private holdingsService: HoldingsService,
@@ -196,7 +192,7 @@ export class MainComponent implements OnInit, OnDestroy {
    *
    * Cette méthode effectue les opérations suivantes :
    *  1. Pour chaque entité de type ITEM, récupère les détails via le service itemService.
-   *  2. Retourne un Observable contenant les entités enrichies.
+   *  2. Retourne un Observable contenant les entités enrichies se trouvant sur présentoir.
    *
    * @param {EnrichedEntity[]} entities - La liste des entités à enrichir.
    * @returns {Observable<EnrichedEntity[]>} Un Observable émettant la liste des entités enrichies.
@@ -207,12 +203,16 @@ export class MainComponent implements OnInit, OnDestroy {
     const itemEntities = entities.filter(e => e.type === EntityType.ITEM);
     const setEntities = entities.filter(e => e.type === EntityType.SET);
 
-    // Pour les entités de type ITEM, on récupère les détails
+    // Pour les entités de type ITEM, on récupère les détails et on indique que le traitement de déplacement de localisation n'est pas commencé
     const itemDetails$ = itemEntities.length > 0
       ? forkJoin(
           itemEntities.map(item =>
             this.itemsService.getItem(item.link).pipe(
-              map(details => ({ ...item, details })),
+              map(details => ({ 
+                ...item, 
+                details, 
+                status: 'unstarted'
+              })),
               catchError(error => {
                 console.error(`Erreur lors de la récupération des détails de l'item ${item.id}:`, error);
                 return of(item); // Retourne l'item original en cas d'erreur
@@ -227,11 +227,20 @@ export class MainComponent implements OnInit, OnDestroy {
       items: itemDetails$,
       sets: of(setEntities)
     }).pipe(
-      map(({ items, sets }) => [...items, ...sets])
+      // map(({ items, sets }) => [...items, ...sets])
+      map(({ items, sets }) => {
+
+        // On ne garde que les exemplaires sur présentoir
+        const filteredItems = items.filter(
+          (item): item is EnrichedEntity & { details: Item } => 
+            !!item && this.isExtended(item) && item.details?.location.includes('PRSNTR')
+        );
+        return [...filteredItems, ...sets];
+      })
     );
   }
 
-  /**
+/**
  * Pour chaque exemplaire, récupère la holding correspondante,
  * calcule la localisation monographique, met à jour le XML et envoie la holding mise à jour.
  * 
@@ -252,88 +261,91 @@ export class MainComponent implements OnInit, OnDestroy {
     // Si on a des erreurs, sur l'une de ces opéartions, il faut conserver l'erreur et les informations de l'exemplaire concerné
     // A la fin du traitement si tout s'est passé sans erreur, on fait un message de succès indiquant le nombre d'exemplaires concernés
     // S'il y a eu une erreur au moins, on fait un message indiquant le nombre d'exemplaire concerné, le nombre d'exemplaires en erreur et le détail des erreurs par exemplaire. 
-
     if (!this.dataSource || this.dataSource.length === 0) {
       this.alert.info("Aucun exemplaire à traiter.");
       return;
     }
-    
-    const results: {
-      success: boolean;
-      entity: EnrichedEntity;
-      error?: any;
-    }[] = [];
 
-    const observables = this.dataSource.map(entity => {
-      // Ne traiter que les entités étendues (avec détails)
-      if (!this.isExtended(entity)) {
-        return of(null);
+    let successCount = 0;
+    let errorCount = 0;
+
+    // Initialisation des statuts
+    this.dataSource.forEach(e => {
+      if (this.isExtended(e)) {
+        e.status = 'pending';
+        e.error = null;
       }
-
-      const mmsId = entity.details.mms_id;
-      const holdingId = entity.details.holding_id;
-      const callNumber = entity.details.permanent_call_number;
-      const holdingLink = `/bibs/${mmsId}/holdings/${holdingId}`;
-
-      return this.holdingsService.getHolding(holdingLink).pipe(
-        map(holding => {
-          // Calcule la localisation monographique
-          const localisation = getLocalisationFromCallNumber(callNumber);
-
-          // Met à jour le XML de la holding
-          this.holdingsService.updateHoldingXml(holding, {
-            location: localisation
-          });
-
-          return { holding, entity };
-        }),
-
-        // Met à jour la holding dans Alma
-        switchMap(({ holding, entity }) =>
-          this.holdingsService.updateHolding(holding).pipe(
-            map(() => ({ success: true, entity, error: undefined })),
-            catchError(err => {
-              console.log('Erreur updateHolding :', err); // <-- log ici
-              return of({ success: false, entity, error: err });
-            })
-          )
-        ),
-        catchError(err => {
-          console.log('Erreur getHolding ou updateHoldingXml :', err); // <-- log ici
-          return of({ success: false, entity, error: err });
-        })
-      );
     });
-    // Lancer tous les traitements en parallèle
-    forkJoin(observables).subscribe(resArray => {
-      const successes = resArray.filter(r => r?.success);
-      const failures = resArray.filter(r => r && !r.success);
 
-      if (failures.length === 0) {
-        this.alert.success(`Mise à jour réussie pour ${successes.length} exemplaires.`);
-      } else {
-        const detailErrors = failures.map(f => {
-          const err = f?.error;
+    this.loading = true;
 
-            const formattedError = err
-              ? {
-                  message: err.message,
-                  stack: err.stack,
-                  name: err.name
-                }
-              : null;
+    // this.dataSource doit être traité en flux RxJS et on en émet un à la fois
+    // et on accepte d'en traiter 3 en parallèle maximum.
+    from(this.dataSource).pipe(
 
-            console.log('Détail erreur exemplaire :', err);
+      // Chaque entité émise par dataSource est déplacée vers sa localisation définitive
+      mergeMap(entity => {
+        if (!this.isExtended(entity)) {
+          return of(null);
+        }
+        const mmsId = entity.details.mms_id;
+        const holdingId = entity.details.holding_id;
+        const callNumber = entity.details.permanent_call_number;
+        const holdingLink = `/bibs/${mmsId}/holdings/${holdingId}`;
 
-            return {
-              title: f?.entity?.details?.title || '-',
-              error: formattedError
-            };          
-        });
-        this.alert.info(
-          `Traitement partiel : ${successes.length} réussis, ${failures.length} en erreur : ${ JSON.stringify(detailErrors, null, 2) }.`,
+        // On cherche la holding, on la met à jour
+        return this.holdingsService.getHolding(holdingLink).pipe(
+
+          // Chaque holding est préparée pour la mise à jour 
+          map(holding => {
+            const localisation = getLocalisationFromCallNumber(callNumber);
+            console.log(`Cote : ${entity.details.permanent_call_number}, localisation calculée : ${localisation}.`)
+            this.holdingsService.updateHoldingXml(holding, { location: localisation });
+            // Conserver le lien vers la holding pour le prochain appel API par updateHolding
+            holding.link = holdingLink;
+            return { holding, entity };
+          }),
+
+          // Puis elle est mise à jour effectivement dans Alma
+          mergeMap(({ holding, entity }) =>
+            this.holdingsService.updateHolding(holding).pipe(
+              map(() => {
+                entity.status = 'success';
+                successCount++;
+                return true;
+              }),
+              catchError(err => {
+                console.log("erreur dans le premier mergeMap : ");
+                console.log(err);
+                entity.status = 'error';
+                entity.error = err;
+                errorCount++;
+                return of(false);
+              })
+            )
+          ),
+
+          catchError(err => {
+            console.log("erreur dans le second mergeMap : ");
+            console.log(err);
+            entity.status = 'error';
+            entity.error = err;
+            errorCount++;
+            return of(false);
+          })
         );
-      }
-    });
-  }  
+
+      }, 3), // <-- limite de concurrence (3 requêtes en parallèle)
+
+      finalize(() => {
+        this.loading = false;
+
+        if (errorCount === 0) {
+          this.alert.success(`Mise à jour réussie pour ${successCount} exemplaires.`);
+        } else {
+          this.alert.info(`Traitement terminé : ${successCount} réussis, ${errorCount} en erreur.`);
+        }
+      })
+    ).subscribe();
+  }
 }

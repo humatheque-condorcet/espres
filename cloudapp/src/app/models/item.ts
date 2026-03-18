@@ -5,4 +5,5 @@ export interface Item {
   title: string;
   permanent_call_number: string;
   barcode: string;
+  location: string;
 }
