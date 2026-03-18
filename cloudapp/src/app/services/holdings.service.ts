@@ -66,11 +66,11 @@ export class HoldingsService {
    * @param {Holding} holding La holding dont le XML doit être mis à jour.
    * @param {{ location: string, call_number_value: string }} value Objet contenant :
    *   - `location` : la nouvelle localisation à écrire dans le subfield `c`.
-   *   - `call_number_value` : la nouvelle cote à écrire dans le subfield `h`.
+   *   - `call_number_value` : (optionnel) la nouvelle cote à écrire dans le subfield `h`.
    * @memberof HoldingsService
    * @returns {void}
    */
-  updateHoldingXml(holding: Holding, value: { location: string, call_number_value: string }) {
+  updateHoldingXml(holding: Holding, value: { location: string, call_number_value?: string }) {
     if (!holding.anies || !holding.anies[0]) {
       console.error("Aucun XML dans holding.anies");
       return;
@@ -97,13 +97,15 @@ export class HoldingsService {
     subfieldC.textContent = value.location;
 
     // Met à jour ou crée le subfield h
-    let subfieldH = datafield852.querySelector('subfield[code="h"]');
-    if (!subfieldH) {
-      subfieldH = doc.createElement('subfield');
-      subfieldH.setAttribute('code', 'h');
-      datafield852.appendChild(subfieldH);
+    if (value.call_number_value !== undefined) {
+      let subfieldH = datafield852.querySelector('subfield[code="h"]');
+      if (!subfieldH) {
+        subfieldH = doc.createElement('subfield');
+        subfieldH.setAttribute('code', 'h');
+        datafield852.appendChild(subfieldH);
+      }
+      subfieldH.textContent = value.call_number_value;
     }
-    subfieldH.textContent = value.call_number_value;
 
     // Sérialise de nouveau le XML
     const serializer = new XMLSerializer();

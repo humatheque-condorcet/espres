@@ -16,6 +16,7 @@ import { HoldingResultsCardComponent } from './holding-results-card/holding-resu
 import { HoldingInfoComponent } from './holding-info/holding-info.component';
 import { NoEntitiesComponent } from './no-entities/no-entities.component';
 import { HoldingFormComponent } from './holding-form/holding-form.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +30,7 @@ import { HoldingFormComponent } from './holding-form/holding-form.component';
         HoldingSelectorComponent,
         NoEntitiesComponent,
         TruncatePipe,
+        ConfirmDialogComponent
     ],
     bootstrap: [AppComponent],
     imports: [

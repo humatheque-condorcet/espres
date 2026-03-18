@@ -32,7 +32,8 @@ export class ItemsService {
             holding_id: res.holding_data.holding_id,
             item_id: res.item_data.pid,
             title: res.bib_data.title,
-            permanent_call_number: res.holding_data.permanent_call_number
+            permanent_call_number: res.holding_data.permanent_call_number,
+            barcode: res.item_data.barcode
           }
         ))
       );

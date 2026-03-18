@@ -4,4 +4,5 @@ export interface Item {
   item_id: string;
   title: string;
   permanent_call_number: string;
+  barcode: string;
 }

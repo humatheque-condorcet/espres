@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Confirmation</h2>
+<mat-dialog-content>
+  Voulez-vous vraiment remettre ces exemplaires en localisation monographie ?
+  <br/>
+  <br/>
+  Attention :  si vous confirmez, ne quittez pas Alma pendant l'exécution du traitement !
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Annuler</button>
+  <button mat-button color="primary" (click)="confirm()">Oui</button>
+</mat-dialog-actions>
