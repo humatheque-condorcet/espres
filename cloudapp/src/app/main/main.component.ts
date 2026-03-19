@@ -38,6 +38,8 @@ export class MainComponent implements OnInit, OnDestroy {
    */
   entities$ = this.entitiesSubject.asObservable();
 
+  allSuccess$!: Observable<boolean>;
+
   /**
    * Subscription à l'Observable des entités.
    * Sert à se désabonner lors de la destruction du composant.
@@ -88,6 +90,17 @@ export class MainComponent implements OnInit, OnDestroy {
         this.entitiesSubject.next(entities); // Met à jour le BehaviorSubject
         this.dataSource = entities;
       });
+
+      this.allSuccess$ = this.entities$.pipe(
+        map(entities => {
+          if (!entities) return false;
+
+          const items = entities.filter(this.isExtended.bind(this));
+
+          return items.length > 0 &&
+                items.every(e => e.status === 'success' || e.status === 'pending');
+        })
+      );
   }
 
   /**
@@ -336,9 +349,13 @@ export class MainComponent implements OnInit, OnDestroy {
         );
 
       }, 3), // <-- limite de concurrence (3 requêtes en parallèle)
-
+    
       finalize(() => {
         this.loading = false;
+
+        // A la fin du traitement, nous réémettons l'entitiesSubject pour qu'il modifie
+        // allSuccess$ et l'activation / désactivation du bouton de déclenchement du traitement dans l'application.
+        this.entitiesSubject.next([...this.dataSource]);
 
         if (errorCount === 0) {
           this.alert.success(`Mise à jour réussie pour ${successCount} exemplaires.`);

@@ -6,7 +6,7 @@
   <ng-template #hasEntities>
     <h1>ESPRES</h1>
 
-    <button mat-flat-button color="primary" class="eca-actions single-button" (click)="moveToMonographyLocation()">Remettre en localisation monographie</button>
+    <button mat-flat-button color="primary" class="eca-actions single-button" (click)="moveToMonographyLocation()" [disabled]="allSuccess$ | async">Remettre en localisation monographie</button>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
       <ng-container matColumnDef="status">
@@ -15,11 +15,11 @@
           <ng-container [ngSwitch]="element.status">
             <mat-icon *ngSwitchCase="'success'" color="primary">check_circle</mat-icon>
             <mat-icon *ngSwitchCase="'error'" color="warn" [matTooltip]="element.error?.message || element.error">error</mat-icon>
-            <mat-icon *ngSwitchCase="'pending'">hourglass_empty</mat-icon>
-            <mat-icon *ngSwitchCase="'unstarted'">radio_button_unchecked</mat-icon>
+            <mat-icon *ngSwitchCase="'pending'">autorenew</mat-icon>
+            <mat-icon *ngSwitchCase="'unstarted'">location_on</mat-icon>
             <mat-icon *ngSwitchDefault>help_outline</mat-icon>
           </ng-container>
-        </td>      
+        </td>       
       </ng-container>
       <!-- Title Column -->
       <ng-container matColumnDef="title">
@@ -49,7 +49,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
     </table>
-    <button mat-flat-button color="primary" class="eca-actions single-button" (click)="moveToMonographyLocation()">Remettre en localisation monographie</button>
+    <button mat-flat-button color="primary" class="eca-actions single-button" (click)="moveToMonographyLocation()" [disabled]="allSuccess$ | async">Remettre en localisation monographie</button>
   </ng-template>
 </ng-container>
 

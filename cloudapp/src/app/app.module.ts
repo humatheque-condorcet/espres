@@ -10,24 +10,14 @@ import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { TruncatePipe } from './pipes/truncate.pipe'; 
 import { CapitalizePipe } from './pipes/capitalize.pipe'; 
-import { HoldingCheckCardComponent } from './holding-check-card/holding-check-card.component';
-import { HoldingSelectorComponent } from './holding-selector/holding-selector.component';
-import { HoldingResultsCardComponent } from './holding-results-card/holding-results-card.component';
-import { HoldingInfoComponent } from './holding-info/holding-info.component';
 import { NoEntitiesComponent } from './no-entities/no-entities.component';
-import { HoldingFormComponent } from './holding-form/holding-form.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         CapitalizePipe,
-        HoldingCheckCardComponent,
-        HoldingFormComponent,
-        HoldingInfoComponent,
-        HoldingResultsCardComponent,
         MainComponent,
-        HoldingSelectorComponent,
         NoEntitiesComponent,
         TruncatePipe,
         ConfirmDialogComponent
