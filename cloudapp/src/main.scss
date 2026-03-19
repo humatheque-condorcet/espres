@@ -83,4 +83,9 @@
   .eca-actions.single-button button {
     flex: 1; /* le bouton prend toute la largeur disponible */
   }
+
+  .compact-table .mdc-data-table__cell,
+  .compact-table .mdc-data-table__header-cell {
+    padding: 0 1px;
+  }
 }
