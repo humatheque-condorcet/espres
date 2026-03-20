@@ -88,4 +88,14 @@
   .compact-table .mdc-data-table__header-cell {
     padding: 0 1px;
   }
+
+  .red {
+    color: red;
+  }
+  .center {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+  }
 }

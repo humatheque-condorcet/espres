@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { CloudAppRestService, HttpMethod } from "@exlibris/exl-cloudapp-angular-lib";
-import { Observable } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
 import { Holding } from "../models/holding";
 
 @Injectable({
@@ -23,6 +23,37 @@ export class HoldingsService {
   getHolding (link: string): Observable<Holding> {
     return this.restService.call(`${link}`);
   }
+
+  /**
+   * Compte le nombre total d'items associés à une holding spécifique dans Alma.
+   *
+   * Cette méthode :
+   *  1. Construit l'URL de l'API Alma pour récupérer les items d'une holding donnée, en utilisant `mms_id` et `holding_id`.
+   *  2. Effectue une requête GET via le service REST pour obtenir la réponse contenant les items.
+   *  3. Si la réponse est valide et contient `total_record_count`, extrait ce champ pour obtenir le nombre total d'items.
+   *  4. Si la réponse est vide, invalide ou ne contient pas `total_record_count`, retourne `0`.
+   *  5. Retourne un `Observable<number>` émettant le nombre total d'items (ou `0` en cas d'erreur ou d'absence de réponse).
+   *
+   * @param {string} mms_id L'identifiant MMS de la notice bibliographique associée à la holding.
+   * @param {string} holding_id L'identifiant de la holding pour laquelle compter les items.
+   * @memberof [NomDeVotreService]
+   * @returns {Observable<number>} Un Observable émettant le nombre total d'items associés à la holding, ou `0` si la réponse est invalide.
+   */
+  countItemsInHolding(mms_id: string, holding_id: string): Observable<number> {
+    const link = `/bibs/${mms_id}/holdings/${holding_id}/items`;
+    return this.restService.call(`${link}`).pipe(
+      map((response: any) => {
+        // Vérifie si la réponse existe et contient total_record_count
+        if (response && typeof response.total_record_count === 'number') {
+          return response.total_record_count;
+        } else {
+          return 0; // Retourne 0 si la réponse est invalide ou absente
+        }
+      }),
+      catchError(() => of(0)) // En cas d'erreur HTTP, retourne 0
+    );
+  }
+
 
   /**
    * Envoie la mise à jour d'une holding à Alma via le service REST.

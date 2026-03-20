@@ -1,11 +1,36 @@
 <h2 mat-dialog-title>Confirmation</h2>
 <mat-dialog-content>
-  Voulez-vous vraiment remettre ces exemplaires en localisation monographie ?
+  <ng-container *ngIf="!data.isPresentoirMode">
+    Voulez-vous vraiment remettre ces exemplaires en localisation monographie ?
+  </ng-container>
+  <ng-container *ngIf="data.isPresentoirMode">
+    <div>
+      Voulez-vous vraiment envoyer ces exemplaires vers un présentoir ?
+      Si oui, choisissez un présentoir et confirmer. 
+      Si non, annulez.
+    </div> 
+    <br>
+    <div class="center">
+    <mat-icon class="center red">warning</mat-icon>
+    <mat-form-field>
+      <mat-label>Localisation du présentoir</mat-label>
+      <mat-select [(value)]="selectedLocation">
+        <mat-option *ngFor="let loc of data.presentoirLocations" [value]="loc">
+          {{ loc }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    </div>
+  </ng-container>
   <br/>
-  <br/>
-  Attention :  si vous confirmez, ne quittez pas Alma pendant l'exécution du traitement !
+  Attention : si vous confirmez, ne quittez pas Alma pendant l'exécution du traitement !
 </mat-dialog-content>
 <mat-dialog-actions align="end">
+  <button mat-button color="primary" (click)="confirm()"
+          [disabled]="disableButton()">
+    {{ data.isPresentoirMode
+      ? 'Déplacer vers le présentoir'
+      : 'Remettre en rayon' }}
+  </button>
   <button mat-button (click)="cancel()">Annuler</button>
-  <button mat-button color="primary" (click)="confirm()">Oui</button>
 </mat-dialog-actions>

@@ -16,67 +16,76 @@
     
     <hr>
 
-    <button mat-flat-button color="primary" class="eca-actions single-button"
-      (click)="executeMove()"
-      [disabled]="(allSuccess$ | async)">
-      {{
-        (mode$ | async) === 'toMonography'
-          ? 'Remettre en localisation monographie'
-          : 'Envoyer vers présentoir'
-      }}
-    </button>
+      <button mat-flat-button color="primary" class="eca-actions single-button"
+        (click)="executeMove()"
+        [disabled]="!(canExecuteMove$ | async)">
+        {{
+          (mode$ | async) === 'toMonography'
+            ? 'Remettre en localisation monographie'
+            : 'Envoyer vers présentoir'
+        }}
+      </button>
 
-    <table mat-table [dataSource]="(filteredEntities$ | async) ?? []" 
-      class="mat-elevation-z1 compact-table">
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <ng-container [ngSwitch]="element.status">
-            <mat-icon *ngSwitchCase="'success'" color="primary">check_circle</mat-icon>
-            <mat-icon *ngSwitchCase="'error'" color="warn" [matTooltip]="element.error?.message || element.error">error</mat-icon>
-            <mat-icon *ngSwitchCase="'pending'">autorenew</mat-icon>
-            <mat-icon *ngSwitchCase="'unstarted'">location_on</mat-icon>
-            <mat-icon *ngSwitchDefault>help_outline</mat-icon>
-          </ng-container>
-        </td>
-      </ng-container>
+      <table mat-table [dataSource]="(filteredEntities$ | async) ?? []" 
+        class="mat-elevation-z1 compact-table">
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container [ngSwitch]="element.status">
+              <mat-icon *ngSwitchCase="'success'" color="primary">check_circle</mat-icon>
+              <mat-icon *ngSwitchCase="'error'" class="red" [matTooltip]="element.error?.message || element.error">error</mat-icon>
+              <mat-spinner *ngSwitchCase="'pending'" diameter="20"></mat-spinner>
+              <mat-icon *ngSwitchCase="'unstarted'">location_on</mat-icon>
+              <mat-icon *ngSwitchDefault>help_outline</mat-icon>
+            </ng-container>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>Titre</th>
-        <td mat-cell *matCellDef="let element">
-          {{ isExtended(element) ? (element.details.title | truncate) : '-' }}
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Titre</th>
+          <td mat-cell *matCellDef="let element">
+            {{ isExtended(element) ? (element.details.title | truncate) : '-' }}
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="callNumber">
-        <th mat-header-cell *matHeaderCellDef>Cote</th>
-        <td mat-cell *matCellDef="let element">
-          {{ isExtended(element) ? element.details.permanent_call_number : '-' }}
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="callNumber">
+          <th mat-header-cell *matHeaderCellDef>Cote</th>
+          <td mat-cell *matCellDef="let element">
+            {{ isExtended(element) ? element.details.permanent_call_number : '-' }}
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="barcode">
-        <th mat-header-cell *matHeaderCellDef>Code-barre</th>
-        <td mat-cell *matCellDef="let element">
-          {{ isExtended(element) ? element.details.barcode : '-' }}
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="barcode">
+          <th mat-header-cell *matHeaderCellDef>Code-barre</th>
+          <td mat-cell *matCellDef="let element">
+            {{ isExtended(element) ? element.details.barcode : '-' }}
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
 
-    <button mat-flat-button color="primary" class="eca-actions single-button"
-      (click)="executeMove()"
-      [disabled]="(allSuccess$ | async)">
-      {{
-        (mode$ | async) === 'toMonography'
-          ? 'Remettre en localisation monographie'
-          : 'Envoyer vers présentoir'
-      }}
-    </button>
+      <button mat-flat-button color="primary" class="eca-actions single-button"
+        (click)="executeMove()"
+        [disabled]="!(canExecuteMove$ | async)">
+        {{
+          (mode$ | async) === 'toMonography'
+            ? 'Remettre en localisation monographie'
+            : 'Envoyer vers présentoir'
+        }}
+      </button>
+
   </ng-template>
 </ng-container>
+<hr>
+<div class="highlight">
+  <b>Attention ! </b>
+  <p>Après le traitement de déplacement, Espres ne déclenche pas de rechargement de l'écran.</p> 
+  <p>Ceci permet de prendre connaissance des résultats !
+  <p> Les localisations affichées restent donc celles d'avant le traitement et il faut 
+    recharger la page pour voir les modifications.</p>
+</div>
 
 <div class="loading-shade" *ngIf="loading">
   <mat-spinner diameter="50"></mat-spinner>
