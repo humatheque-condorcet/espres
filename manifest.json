@@ -1,14 +1,13 @@
 {
    "id": "espres",
    "title": "Espres",
-   "subtitle": "Gestion des entrées et sorties des présentoirs",
+   "subtitle": "Gestion des entrées et sorties des présentoirs. (Beta version)",
    "author": "Jérôme Chiavassa-Szenberg",
    "description": "L'app Espres permet de déplacer des exemplaires en présentoir vers la localisation monographie correspondante ou vers la localisation CTLES le cas échéant.\nElle permet aussi de déplacer des exemplaires vers le présentoir souhaité à choisir dans une liste de présentoirs possibles. Si un exemplaire est lié à une holding ayant plus d'un exemplaire, ce mouvement vers le présentoir est refusé.",
    "relevantForInst": [
       "33CCP_INST"
    ],
    "entities": [
-      "HOLDING",
       "ITEM"
    ],
    "icon": {
@@ -18,10 +17,5 @@
    "fullscreen": {
       "allow": false,
       "open": false
-   },
-   "contentSecurity": {
-      "connectSrc": [
-         "http://localhost:3000"
-      ]
    }
 }
