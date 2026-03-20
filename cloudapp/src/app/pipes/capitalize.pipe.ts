@@ -1,5 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+/**
+ * Pipe Angular permettant de mettre en majuscule la première lettre 
+ * d'une chaîne et en minuscule le reste.
+ *
+ * @example
+ * {{ 'CE TEXTE' | capitalize }}
+ * // → "Ce texte"
+ */
 @Pipe({name: 'capitalize'})
 export class CapitalizePipe implements PipeTransform {
   /**

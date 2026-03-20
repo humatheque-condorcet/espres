@@ -1,3 +1,8 @@
+/**
+ * Interface représentant une notice de holding dans Alma.
+ *
+ * @interface Holding
+ */
 export interface Holding {
   mms_id: string;
   holding_id: string;

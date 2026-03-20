@@ -1,5 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+/**
+ * Pipe Angular permettant de tronquer une chaîne de caractères
+ * à une longueur maximale et d'ajouter une ellipse si nécessaire.
+ *
+ * @example
+ * {{ 'Un texte très long' | truncate:10 }}
+ * // → "Un texte…"
+ */
 @Pipe({
   name: 'truncate'
 })

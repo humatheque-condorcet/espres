@@ -3,6 +3,14 @@ import { CloudAppRestService, HttpMethod } from "@exlibris/exl-cloudapp-angular-
 import { catchError, map, Observable, of } from "rxjs";
 import { Holding } from "../models/holding";
 
+/**
+ * Service Angular responsable de la récupération des holdings depuis l'API Alma.
+ *
+ * Ce service encapsule les appels au `CloudAppRestService` afin de fournir
+ * une interface typée pour manipuler les holdings.
+ *
+ * @providedIn root
+ */
 @Injectable({
   providedIn: 'root'  
 })

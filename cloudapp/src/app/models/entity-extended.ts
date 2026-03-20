@@ -1,6 +1,12 @@
 import { Entity } from "@exlibris/exl-cloudapp-angular-lib";
 import { Item } from "./item";
 
+/**
+ * Etats d'un traitement de déplacement.
+ *
+ * @export
+ * @type {ProcessingStatus}
+ */
 type ProcessingStatus = 'unstarted' | 'pending' | 'success' | 'error';
 
 /**

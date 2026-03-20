@@ -3,6 +3,14 @@ import { CloudAppRestService, HttpMethod } from "@exlibris/exl-cloudapp-angular-
 import { Observable } from "rxjs";
 import { Set } from "../models/set";
 
+/**
+ * Service Angular responsable de la récupération des sets depuis l'API Alma.
+ *
+ * Ce service encapsule les appels au `CloudAppRestService` afin de fournir
+ * une interface typée pour manipuler les sets.
+ *
+ * @providedIn root
+ */
 @Injectable({
   providedIn: 'root'  
 })

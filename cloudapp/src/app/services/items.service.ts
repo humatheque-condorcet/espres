@@ -4,7 +4,14 @@ import { Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { Item } from '../models/item'
 
-
+/**
+ * Service Angular responsable de la récupération des items depuis l'API Alma.
+ *
+ * Ce service encapsule les appels au `CloudAppRestService` afin de fournir
+ * une interface typée pour manipuler les items.
+ *
+ * @providedIn root
+ */
 @Injectable({
   providedIn: 'root'  
 })

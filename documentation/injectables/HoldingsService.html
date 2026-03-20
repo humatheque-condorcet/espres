@@ -1,0 +1,862 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>my-exl-cloudapp documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">my-exl-cloudapp documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >HoldingsService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>cloudapp/src/app/services/holdings.service.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Service Angular responsable de la récupération des holdings depuis l&#39;API Alma.</p>
+<p>Ce service encapsule les appels au <code>CloudAppRestService</code> afin de fournir
+une interface typée pour manipuler les holdings.</p>
+
+            </p>
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#countItemsInHolding" >countItemsInHolding</a>
+                            </li>
+                            <li>
+                                <a href="#getHolding" >getHolding</a>
+                            </li>
+                            <li>
+                                <a href="#updateHolding" >updateHolding</a>
+                            </li>
+                            <li>
+                                <a href="#updateHoldingXml" >updateHoldingXml</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(restService: CloudAppRestService)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">cloudapp/src/app/services/holdings.service.ts:17</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>restService</td>
+                                                  
+                                                        <td>
+                                                                    <code>CloudAppRestService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="countItemsInHolding"></a>
+                    <span class="name">
+                        <span ><b>countItemsInHolding</b></span>
+                        <a href="#countItemsInHolding"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>countItemsInHolding(mms_id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, holding_id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="50"
+                                    class="link-to-prism">cloudapp/src/app/services/holdings.service.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Compte le nombre total d&#39;items associés à une holding spécifique dans Alma.</p>
+<p>Cette méthode :</p>
+<ol>
+<li>Construit l&#39;URL de l&#39;API Alma pour récupérer les items d&#39;une holding donnée, en utilisant <code>mms_id</code> et <code>holding_id</code>.</li>
+<li>Effectue une requête GET via le service REST pour obtenir la réponse contenant les items.</li>
+<li>Si la réponse est valide et contient <code>total_record_count</code>, extrait ce champ pour obtenir le nombre total d&#39;items.</li>
+<li>Si la réponse est vide, invalide ou ne contient pas <code>total_record_count</code>, retourne <code>0</code>.</li>
+<li>Retourne un <code>Observable&lt;number&gt;</code> émettant le nombre total d&#39;items (ou <code>0</code> en cas d&#39;erreur ou d&#39;absence de réponse).</li>
+</ol>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>mms_id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>L&#39;identifiant MMS de la notice bibliographique associée à la holding.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>holding_id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>L&#39;identifiant de la holding pour laquelle compter les items.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Observable&lt;number&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un Observable émettant le nombre total d&#39;items associés à la holding, ou <code>0</code> si la réponse est invalide.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getHolding"></a>
+                    <span class="name">
+                        <span ><b>getHolding</b></span>
+                        <a href="#getHolding"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getHolding(link: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="31"
+                                    class="link-to-prism">cloudapp/src/app/services/holdings.service.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Récupère une holding unique depuis Alma via son lien.</p>
+<p>Cette méthode :</p>
+<ol>
+<li>Utilise le lien fourni (<code>link</code>) pour effectuer une requête GET vers le service REST.</li>
+<li>Retourne un <code>Observable&lt;Holding&gt;</code> émettant la holding correspondante telle que renvoyée par Alma.</li>
+</ol>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>link</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>L&#39;URL de la holding à récupérer.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/Holding.html" target="_self" >Observable&lt;Holding&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un Observable émettant la holding récupérée.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateHolding"></a>
+                    <span class="name">
+                        <span ><b>updateHolding</b></span>
+                        <a href="#updateHolding"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateHolding(holding: <a href="../interfaces/Holding.html" target="_self">Holding</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="81"
+                                    class="link-to-prism">cloudapp/src/app/services/holdings.service.ts:81</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Envoie la mise à jour d&#39;une holding à Alma via le service REST.</p>
+<p>Cette méthode :</p>
+<ol>
+<li>Utilise l&#39;URL contenue dans <code>holding.link</code> pour adresser la requête PUT.</li>
+<li>Définit les en-têtes HTTP :<ul>
+<li><code>Content-Type: application/xml</code> pour indiquer que le corps est du XML.</li>
+<li><code>Accept: application/json</code> pour demander la réponse au format JSON.</li>
+</ul>
+</li>
+<li>Sérialise le tableau <code>holding.anies</code> dans un élément <code>&lt;holding&gt;</code> pour constituer le corps de la requête.</li>
+<li>Retourne un <code>Observable&lt;Holding&gt;</code> émettant la holding mise à jour telle que renvoyée par Alma.</li>
+</ol>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>holding</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Holding.html" target="_self" >Holding</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>La holding à mettre à jour dans Alma.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/Holding.html" target="_self" >Observable&lt;Holding&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un Observable émettant la holding mise à jour.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateHoldingXml"></a>
+                    <span class="name">
+                        <span ><b>updateHoldingXml</b></span>
+                        <a href="#updateHoldingXml"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateHoldingXml(holding: <a href="../interfaces/Holding.html" target="_self">Holding</a>, value: literal type)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="112"
+                                    class="link-to-prism">cloudapp/src/app/services/holdings.service.ts:112</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Met à jour les sous-champs MARC 852 <code>$c</code> (localisation) et <code>$h</code> (cote) d&#39;une holding.</p>
+<p>Cette méthode fonctionne comme suit :</p>
+<ol>
+<li>Vérifie que le tableau <code>anies</code> de la holding contient au moins un élément XML.
+Si ce n’est pas le cas, un message d&#39;erreur est logué et la méthode s&#39;arrête.</li>
+<li>Parse le XML existant en utilisant <code>DOMParser</code>.</li>
+<li>Recherche le <code>datafield</code> avec le tag <code>852</code>.
+Si aucun <code>datafield 852</code> n’est trouvé, un message d&#39;erreur est logué et la méthode s&#39;arrête.</li>
+<li>Met à jour ou crée le subfield <code>c</code> avec la valeur de <code>value.location</code>.</li>
+<li>Met à jour ou crée le subfield <code>h</code> avec la valeur de <code>value.call_number_value</code>.</li>
+<li>Sérialise le document XML modifié en chaîne et remplace l’élément <code>anies[0]</code> par ce nouveau XML.</li>
+</ol>
+<ul>
+<li><code>location</code> : la nouvelle localisation à écrire dans le subfield <code>c</code>.</li>
+<li><code>call_number_value</code> : (optionnel) la nouvelle cote à écrire dans le subfield <code>h</code>.</li>
+</ul>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>holding</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Holding.html" target="_self" >Holding</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>La holding dont le XML doit être mis à jour.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Objet contenant :</p>
+<ul>
+<li><code>location</code> : la nouvelle localisation à écrire dans le subfield <code>c</code>.</li>
+<li><code>call_number_value</code> : (optionnel) la nouvelle cote à écrire dans le subfield <code>h</code>.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &quot;@angular/core&quot;;
+import { CloudAppRestService, HttpMethod } from &quot;@exlibris/exl-cloudapp-angular-lib&quot;;
+import { catchError, map, Observable, of } from &quot;rxjs&quot;;
+import { Holding } from &quot;../models/holding&quot;;
+
+/**
+ * Service Angular responsable de la récupération des holdings depuis l&#x27;API Alma.
+ *
+ * Ce service encapsule les appels au &#x60;CloudAppRestService&#x60; afin de fournir
+ * une interface typée pour manipuler les holdings.
+ *
+ * @providedIn root
+ */
+@Injectable({
+  providedIn: &#x27;root&#x27;  
+})
+export class HoldingsService {
+  constructor(private restService: CloudAppRestService) {}
+  
+  /**
+   * Récupère une holding unique depuis Alma via son lien.
+   *
+   * Cette méthode :
+   *  1. Utilise le lien fourni (&#x60;link&#x60;) pour effectuer une requête GET vers le service REST.
+   *  2. Retourne un &#x60;Observable&lt;Holding&gt;&#x60; émettant la holding correspondante telle que renvoyée par Alma.
+   *
+   * @param {string} link L&#x27;URL de la holding à récupérer.
+   * @memberof HoldingsService
+   * @returns {Observable&lt;Holding&gt;} Un Observable émettant la holding récupérée.
+   */
+  getHolding (link: string): Observable&lt;Holding&gt; {
+    return this.restService.call(&#x60;${link}&#x60;);
+  }
+
+  /**
+   * Compte le nombre total d&#x27;items associés à une holding spécifique dans Alma.
+   *
+   * Cette méthode :
+   *  1. Construit l&#x27;URL de l&#x27;API Alma pour récupérer les items d&#x27;une holding donnée, en utilisant &#x60;mms_id&#x60; et &#x60;holding_id&#x60;.
+   *  2. Effectue une requête GET via le service REST pour obtenir la réponse contenant les items.
+   *  3. Si la réponse est valide et contient &#x60;total_record_count&#x60;, extrait ce champ pour obtenir le nombre total d&#x27;items.
+   *  4. Si la réponse est vide, invalide ou ne contient pas &#x60;total_record_count&#x60;, retourne &#x60;0&#x60;.
+   *  5. Retourne un &#x60;Observable&lt;number&gt;&#x60; émettant le nombre total d&#x27;items (ou &#x60;0&#x60; en cas d&#x27;erreur ou d&#x27;absence de réponse).
+   *
+   * @param {string} mms_id L&#x27;identifiant MMS de la notice bibliographique associée à la holding.
+   * @param {string} holding_id L&#x27;identifiant de la holding pour laquelle compter les items.
+   * @memberof [NomDeVotreService]
+   * @returns {Observable&lt;number&gt;} Un Observable émettant le nombre total d&#x27;items associés à la holding, ou &#x60;0&#x60; si la réponse est invalide.
+   */
+  countItemsInHolding(mms_id: string, holding_id: string): Observable&lt;number&gt; {
+    const link &#x3D; &#x60;/bibs/${mms_id}/holdings/${holding_id}/items&#x60;;
+    return this.restService.call(&#x60;${link}&#x60;).pipe(
+      map((response: any) &#x3D;&gt; {
+        // Vérifie si la réponse existe et contient total_record_count
+        if (response &amp;&amp; typeof response.total_record_count &#x3D;&#x3D;&#x3D; &#x27;number&#x27;) {
+          return response.total_record_count;
+        } else {
+          return 0; // Retourne 0 si la réponse est invalide ou absente
+        }
+      }),
+      catchError(() &#x3D;&gt; of(0)) // En cas d&#x27;erreur HTTP, retourne 0
+    );
+  }
+
+
+  /**
+   * Envoie la mise à jour d&#x27;une holding à Alma via le service REST.
+   *
+   * Cette méthode :
+   *  1. Utilise l&#x27;URL contenue dans &#x60;holding.link&#x60; pour adresser la requête PUT.
+   *  2. Définit les en-têtes HTTP :
+   *     - &#x60;Content-Type: application/xml&#x60; pour indiquer que le corps est du XML.
+   *     - &#x60;Accept: application/json&#x60; pour demander la réponse au format JSON.
+   *  3. Sérialise le tableau &#x60;holding.anies&#x60; dans un élément &#x60;&lt;holding&gt;&#x60; pour constituer le corps de la requête.
+   *  4. Retourne un &#x60;Observable&lt;Holding&gt;&#x60; émettant la holding mise à jour telle que renvoyée par Alma.
+   *
+   * @param {Holding} holding La holding à mettre à jour dans Alma.
+   * @memberof HoldingsService
+   * @returns {Observable&lt;Holding&gt;} Un Observable émettant la holding mise à jour.
+  */
+  updateHolding( holding: Holding ): Observable&lt;Holding&gt; {
+    return this.restService.call( {
+      url: holding.link,
+      headers: { 
+        &quot;Content-Type&quot;: &quot;application/xml&quot;,
+        Accept: &quot;application/json&quot; },
+      requestBody: &#x60;&lt;holding&gt;${holding.anies}&lt;/holding&gt;&#x60;,
+      method: HttpMethod.PUT
+    });
+  } 
+
+  /**
+   * Met à jour les sous-champs MARC 852 &#x60;$c&#x60; (localisation) et &#x60;$h&#x60; (cote) d&#x27;une holding.
+   *
+   * Cette méthode fonctionne comme suit :
+   *  1. Vérifie que le tableau &#x60;anies&#x60; de la holding contient au moins un élément XML.
+   *     Si ce n’est pas le cas, un message d&#x27;erreur est logué et la méthode s&#x27;arrête.
+   *  2. Parse le XML existant en utilisant &#x60;DOMParser&#x60;.
+   *  3. Recherche le &#x60;datafield&#x60; avec le tag &#x60;852&#x60;.
+   *     Si aucun &#x60;datafield 852&#x60; n’est trouvé, un message d&#x27;erreur est logué et la méthode s&#x27;arrête.
+   *  4. Met à jour ou crée le subfield &#x60;c&#x60; avec la valeur de &#x60;value.location&#x60;.
+   *  5. Met à jour ou crée le subfield &#x60;h&#x60; avec la valeur de &#x60;value.call_number_value&#x60;.
+   *  6. Sérialise le document XML modifié en chaîne et remplace l’élément &#x60;anies[0]&#x60; par ce nouveau XML.
+   *
+   * @param {Holding} holding La holding dont le XML doit être mis à jour.
+   * @param {{ location: string, call_number_value: string }} value Objet contenant :
+   *   - &#x60;location&#x60; : la nouvelle localisation à écrire dans le subfield &#x60;c&#x60;.
+   *   - &#x60;call_number_value&#x60; : (optionnel) la nouvelle cote à écrire dans le subfield &#x60;h&#x60;.
+   * @memberof HoldingsService
+   * @returns {void}
+   */
+  updateHoldingXml(holding: Holding, value: { location: string, call_number_value?: string }) {
+    if (!holding.anies || !holding.anies[0]) {
+      console.error(&quot;Aucun XML dans holding.anies&quot;);
+      return;
+    }
+
+    const xmlString &#x3D; holding.anies[0];
+    const parser &#x3D; new DOMParser();
+    const doc &#x3D; parser.parseFromString(xmlString, &quot;application/xml&quot;);
+
+    // Récupère le datafield 852
+    const datafield852 &#x3D; doc.querySelector(&#x27;datafield[tag&#x3D;&quot;852&quot;]&#x27;);
+    if (!datafield852) {
+      console.error(&quot;Aucun datafield 852 trouvé&quot;);
+      return;
+    }
+
+    // Met à jour ou crée le subfield c
+    let subfieldC &#x3D; datafield852.querySelector(&#x27;subfield[code&#x3D;&quot;c&quot;]&#x27;);
+    if (!subfieldC) {
+      subfieldC &#x3D; doc.createElement(&#x27;subfield&#x27;);
+      subfieldC.setAttribute(&#x27;code&#x27;, &#x27;c&#x27;);
+      datafield852.appendChild(subfieldC);
+    }
+    subfieldC.textContent &#x3D; value.location;
+
+    // Met à jour ou crée le subfield h
+    if (value.call_number_value !&#x3D;&#x3D; undefined) {
+      let subfieldH &#x3D; datafield852.querySelector(&#x27;subfield[code&#x3D;&quot;h&quot;]&#x27;);
+      if (!subfieldH) {
+        subfieldH &#x3D; doc.createElement(&#x27;subfield&#x27;);
+        subfieldH.setAttribute(&#x27;code&#x27;, &#x27;h&#x27;);
+        datafield852.appendChild(subfieldH);
+      }
+      subfieldH.textContent &#x3D; value.call_number_value;
+    }
+
+    // Sérialise de nouveau le XML
+    const serializer &#x3D; new XMLSerializer();
+    holding.anies[0] &#x3D; serializer.serializeToString(doc);
+  }
+}</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'HoldingsService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

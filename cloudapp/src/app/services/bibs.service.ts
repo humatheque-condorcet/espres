@@ -3,6 +3,14 @@ import { CloudAppRestService, HttpMethod } from "@exlibris/exl-cloudapp-angular-
 import { Observable } from "rxjs";
 import { Bib } from "../models/bib";
 
+/**
+ * Service Angular responsable de la récupération des notices bibs depuis l'API Alma.
+ *
+ * Ce service encapsule les appels au `CloudAppRestService` afin de fournir
+ * une interface typée pour manipuler les notices bibs.
+ *
+ * @providedIn root
+ */
 @Injectable({
   providedIn: 'root'  
 })
